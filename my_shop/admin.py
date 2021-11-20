@@ -1,7 +1,7 @@
 from django.contrib import admin
-from my_shop.models import Product, Images, Brands, Categories
+from my_shop.models import Product, Brands, Categories,ImagesHover
 
 admin.site.register(Product)
 admin.site.register(Brands)
 admin.site.register(Categories)
-admin.site.register(Images)
+admin.site.register(ImagesHover)
