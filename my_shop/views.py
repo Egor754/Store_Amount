@@ -1,10 +1,12 @@
+from django.contrib import messages
 from django.db.models import Min, Prefetch
 from django.shortcuts import get_list_or_404, redirect, render, get_object_or_404
 from django.views import View
 from django.views.generic import ListView, DetailView, TemplateView
 
 from my_shop.cart import Cart
-from my_shop.models import Categories, Product, Brands
+from my_shop.forms import CheckoutForm
+from my_shop.models import Categories, Product, OrderItem
 from my_shop.utils import MixinShopView
 
 
@@ -14,7 +16,7 @@ class HomeView(ListView):
     model = Categories
 
     def get_queryset(self):
-        print(self.request.session['cart'])
+        print(self.request.path)
         return Categories.objects.prefetch_related('product').annotate(min_price=Min('product__price'))
 
 
@@ -47,6 +49,11 @@ class ShopViewCategory(ShopView):
         return all_products
 
 
+class FavoriteView(ShopView):
+    def get_queryset(self):
+        return Product.objects.filter(stars__gte=4)
+
+
 class DetailProductView(ListView):
     model = Product
     template_name = 'my_shop/product-details.html'
@@ -69,3 +76,30 @@ class CartView(View):
     def get(self, request, *args, **kwargs):
         cart = Cart(request)
         return render(request, 'my_shop/cart.html', {'cart': cart})
+
+
+class CheckoutView(View):
+    def get(self, request):
+        form = CheckoutForm()
+        cart = Cart(request)
+        return render(request, 'my_shop/checkout.html', {'cart': cart, 'form': form})
+
+    def post(self, request):
+        cart = Cart(request)
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            order = form.save()
+            for item in cart:
+                OrderItem.objects.create(order=order,
+                                         product=item['product'],
+                                         price=item['price'],
+                                         quantity=item['quantity'])
+            # очистка корзины
+            # cart.clear()
+            messages.success(request, 'Your order is accepted')
+            redirect('checkout')
+        else:
+            messages.error(request, 'Check the correctness of the entered data')
+
+        form = CheckoutForm()
+        return render(request, 'my_shop/checkout.html', {'cart': cart, 'form': form})

@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-cm4e=fc$j7@(220q51_1wxz$okt+g=4zb-&ue@v5_x0%yqt8ys
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 INTERNAL_IPS = [
     # ...
     '127.0.0.1',
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'my_shop.apps.MyShopConfig',
     'debug_toolbar',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
@@ -112,7 +113,7 @@ CART_SESSION_ID = 'cart'
 
 LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -123,11 +124,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'my_shop/static'),
 ]
+STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_CATEGORIES_IMAGE_DIR = 'category_images'
@@ -136,3 +137,9 @@ MEDIA_PRODUCT_IMAGE_DIR = 'product_images'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+
+
+# AWS_QUERYSTRING_AUTH = False

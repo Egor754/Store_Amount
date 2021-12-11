@@ -16,7 +16,16 @@
     <link rel="icon" href="{% static "my_shop/img/core-img/favicon.ico" %}">
     <!-- Core Style CSS -->
     <link rel="stylesheet" href="{% static "my_shop/css/core-style.css" %}">
+    <style>
 
+
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
 </head>
 
 <body>
@@ -67,9 +76,9 @@
         <!-- Amado Nav -->
         <nav class="amado-nav">
             <ul>
-                <li class="active"><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'shop' %}">Shop</a></li>
-                <li><a href="checkout.html">Checkout</a></li>
+                <li {% if 'home' in request.path %}class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li>
+                <li {% if 'shop' in request.path %}class="active"{% endif %}><a href="{% url 'shop' %}">Shop</a></li>
+                <li {% if 'checkout' in request.path %}class="active"{% endif %}><a href="{% url 'checkout' %}">Checkout</a></li>
             </ul>
         </nav>
         <!-- Button Group -->
@@ -79,9 +88,10 @@
         </div>
         <!-- Cart Menu -->
         <div class="cart-fav-search mb-100">
-            <a href="{% url 'cart' %}" class="cart-nav"><img src="{% static "my_shop/img/core-img/cart.png" %}" alt=""> Cart
+            <a href="{% url 'cart' %}" class="cart-nav"><img src="{% static "my_shop/img/core-img/cart.png" %}" alt="">
+                Cart
                 <span>({{ qty_cart }})</span></a>
-            <a href="#" class="fav-nav"><img src="{% static "my_shop/img/core-img/favorites.png" %}" alt="">
+            <a href="{% url 'favorite' %}" class="fav-nav"><img src="{% static "my_shop/img/core-img/favorites.png" %}" alt="">
                 Favourite</a>
             <a href="#" class="search-nav"><img src="{% static "my_shop/img/core-img/search.png" %}" alt=""> Search</a>
         </div>
